@@ -1,10 +1,10 @@
 import { Link } from '@inertiajs/react';
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { webNavItems } from './nav';
 
 interface JobRow {
@@ -23,8 +23,8 @@ export default function Jobs() {
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.jobs}>
-                <PageHeader title={t.nav.jobs} />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader title={t('menu.jobs')} />
                 <DataTable
                     fetchFunction={fetchJobs}
                     columns={[
@@ -59,7 +59,7 @@ export default function Jobs() {
                         },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

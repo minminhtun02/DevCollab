@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { linkedNameColumn, resourceActionsColumn } from '@/lib/admin-table';
+import { useTranslation } from '@/hooks/useTranslation';
 import { adminNavItems } from './nav';
 
 interface ReportRow {
@@ -22,8 +23,8 @@ export default function Reports() {
 
     return (
         <AuthGuard portal="admin" loginPath="/admin/login">
-            <AppShell portal="admin" navItems={navItems} title={t.nav.reports}>
-                <PageHeader title={t.nav.reports} />
+            <ConnectShell badge="Admin" portal="admin" navItems={navItems}>
+                <PageHeader title={t('menu.reports')} />
                 <DataTable
                     fetchFunction={fetchReports}
                     columns={[
@@ -33,7 +34,7 @@ export default function Reports() {
                             header: 'Reported user',
                             render: (row) => row.reported_user?.name ?? '—',
                         },
-                        { key: 'reason', header: 'Reason', render: (row) => row.reason },
+                        linkedNameColumn<ReportRow>('Reason', '/admin/reports', (row) => row.reason),
                         { key: 'status', header: 'Status', render: (row) => row.status ?? '—' },
                         {
                             key: 'created_at',
@@ -41,9 +42,10 @@ export default function Reports() {
                             render: (row) =>
                                 row.created_at ? new Date(row.created_at).toLocaleDateString() : '—',
                         },
+                        resourceActionsColumn<ReportRow>(t, '/admin/reports', { showEdit: false }),
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

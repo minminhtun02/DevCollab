@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { webNavItems } from './nav';
 
 interface ApplicationRow {
@@ -23,14 +23,14 @@ export default function Applications() {
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.applications}>
-                <PageHeader title={t.nav.applications} />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader title={t('webMenu.applications')} />
                 <DataTable
                     fetchFunction={fetchApplications}
                     columns={[
                         {
                             key: 'job',
-                            header: t.nav.jobs,
+                            header: t('menu.jobs'),
                             render: (row) => row.job?.title ?? '—',
                         },
                         {
@@ -46,7 +46,7 @@ export default function Applications() {
                         },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

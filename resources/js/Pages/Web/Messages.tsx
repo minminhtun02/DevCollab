@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { webNavItems } from './nav';
 
 interface ConversationRow {
@@ -20,8 +20,8 @@ export default function Messages() {
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.messages}>
-                <PageHeader title={t.nav.messages} />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader title={t('webMenu.messages')} />
                 <DataTable
                     fetchFunction={fetchConversations}
                     columns={[
@@ -46,7 +46,7 @@ export default function Messages() {
                         },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

@@ -1,3 +1,124 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --background: 248 30% 98.5%;
+    --foreground: 248 10% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 248 10% 20%;
+    --primary: 205 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 42 86% 55%;
+    --secondary-foreground: 42 30% 22%;
+    --muted: 248 20% 96%;
+    --muted-foreground: 248 8% 58%;
+    --accent: 238 40% 96%;
+    --accent-foreground: 238 50% 35%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 248 15% 91%;
+    --input: 248 15% 91%;
+    --ring: 205 95% 50%;
+    --radius: 0.625rem;
+    --sidebar: 238 30% 99%;
+    --sidebar-foreground: 238 20% 32%;
+    --sidebar-primary: 205 95% 50%;
+    --sidebar-accent: 238 35% 96%;
+    --sidebar-border: 238 20% 92%;
+    --brand-blue: #0893f8;
+    --brand-amber: #f0b02c;
+}
+
+.dark {
+    --background: 248 15% 14.5%;
+    --foreground: 248 10% 96%;
+    --card: 248 12% 19%;
+    --card-foreground: 248 10% 96%;
+    --primary: 205 90% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 248 10% 28%;
+    --secondary-foreground: 248 10% 92%;
+    --muted: 248 10% 26%;
+    --muted-foreground: 248 8% 68%;
+    --accent: 238 20% 28%;
+    --accent-foreground: 238 10% 92%;
+    --border: 248 10% 32%;
+    --input: 248 10% 32%;
+    --ring: 205 90% 58%;
+    --sidebar: 248 12% 17%;
+    --sidebar-foreground: 248 10% 90%;
+    --sidebar-accent: 238 15% 24%;
+    --sidebar-border: 248 10% 30%;
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background font-sans text-foreground antialiased;
+    }
+}
+
+@layer components {
+    .connect-sidebar {
+        background: linear-gradient(
+            168deg,
+            hsl(var(--sidebar)) 0%,
+            hsl(238 35% 97%) 48%,
+            hsl(238 40% 95%) 100%
+        );
+        border-color: hsl(var(--sidebar-border));
+        box-shadow:
+            0 1px 2px rgb(8 147 248 / 0.06),
+            0 8px 24px rgb(8 147 248 / 0.04);
+    }
+
+    .dark .connect-sidebar {
+        background: linear-gradient(
+            168deg,
+            hsl(var(--sidebar)) 0%,
+            hsl(248 12% 16%) 52%,
+            hsl(248 14% 14%) 100%
+        );
+        box-shadow:
+            0 1px 2px rgb(0 0 0 / 0.2),
+            0 8px 24px rgb(0 0 0 / 0.25);
+    }
+
+    .dc-nav-link {
+        @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all;
+    }
+
+    .dc-nav-link-active {
+        background: rgb(8 147 248 / 0.12);
+        color: hsl(205 80% 38%);
+        box-shadow: inset 3px 0 0 0 var(--brand-blue);
+    }
+
+    .dark .dc-nav-link-active {
+        background: rgb(8 147 248 / 0.18);
+        color: hsl(205 90% 72%);
+    }
+
+    .dc-nav-link-idle {
+        @apply text-muted-foreground hover:bg-accent hover:text-accent-foreground;
+    }
+
+    .dc-page-enter {
+        animation: dc-page-enter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+}
+
+@keyframes dc-page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { ListStateView, PageHeader } from '@/components/common';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import api from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { ApiEnvelope } from '@/types/api';
 import { companyNavItems } from './nav';
 
@@ -38,8 +38,8 @@ export default function Dashboard() {
 
     return (
         <AuthGuard portal="company" loginPath="/company/login">
-            <AppShell portal="company" navItems={navItems} title={t.nav.dashboard}>
-                <PageHeader title={t.nav.dashboard} description="Your hiring overview." />
+            <ConnectShell badge="Company" portal="company" navItems={navItems}>
+                <PageHeader description="Your hiring overview." />
                 <ListStateView isLoading={isLoading} isError={isError} isEmpty={false}>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {statLabels.map(({ key, label }) => (
@@ -54,7 +54,7 @@ export default function Dashboard() {
                         ))}
                     </div>
                 </ListStateView>
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

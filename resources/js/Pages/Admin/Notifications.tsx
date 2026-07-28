@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { adminNavItems } from './nav';
 
 interface NotificationRow {
@@ -19,8 +19,8 @@ export default function Notifications() {
 
     return (
         <AuthGuard portal="admin" loginPath="/admin/login">
-            <AppShell portal="admin" navItems={navItems} title={t.nav.notifications}>
-                <PageHeader title={t.nav.notifications} />
+            <ConnectShell badge="Admin" portal="admin" navItems={navItems}>
+                <PageHeader title={t('menu.notifications')} />
                 <DataTable
                     fetchFunction={fetchNotifications}
                     columns={[
@@ -33,7 +33,7 @@ export default function Notifications() {
                         },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

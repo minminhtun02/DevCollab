@@ -1,11 +1,11 @@
 import { Link } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { PageHeader, ListStateView } from '@/components/common';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import api from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { ApiEnvelope } from '@/types/api';
 import { webNavItems } from './nav';
 
@@ -32,18 +32,18 @@ export default function Dashboard() {
     });
 
     const quickLinks = [
-        { label: t.nav.profile, href: '/app/profile' },
-        { label: t.nav.jobs, href: '/app/jobs' },
-        { label: t.nav.developers, href: '/app/developers' },
-        { label: t.nav.messages, href: '/app/messages' },
-        { label: t.nav.events, href: '/app/events' },
-        { label: t.nav.settings, href: '/app/settings' },
+        { label: t('webMenu.profile'), href: '/app/profile' },
+        { label: t('menu.jobs'), href: '/app/jobs' },
+        { label: t('webMenu.developers'), href: '/app/developers' },
+        { label: t('webMenu.messages'), href: '/app/messages' },
+        { label: t('menu.events'), href: '/app/events' },
+        { label: t('webMenu.settings'), href: '/app/settings' },
     ];
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.dashboard}>
-                <PageHeader title={t.nav.dashboard} description={t.app.tagline} />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader description={t('web.dashboard.tagline')} />
                 <ListStateView isLoading={isLoading} isError={isError} isEmpty={false}>
                     <div className="grid gap-6 md:grid-cols-2">
                         <Card>
@@ -64,7 +64,7 @@ export default function Dashboard() {
                         </Card>
                         <Card>
                             <CardHeader>
-                                <CardTitle>Quick links</CardTitle>
+                                <CardTitle>{t('webMenu.quickLinks')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <ul className="space-y-2">
@@ -83,7 +83,7 @@ export default function Dashboard() {
                         </Card>
                     </div>
                 </ListStateView>
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

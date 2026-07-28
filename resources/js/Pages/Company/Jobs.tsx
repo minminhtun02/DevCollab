@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { createHeaderAction, linkedNameColumn, resourceActionsColumn } from '@/lib/admin-table';
+import { formatDate } from '@/lib/format-date';
+import { useTranslation } from '@/hooks/useTranslation';
 import { companyNavItems } from './nav';
 
 interface JobRow {
@@ -22,24 +24,20 @@ export default function Jobs() {
 
     return (
         <AuthGuard portal="company" loginPath="/company/login">
-            <AppShell portal="company" navItems={navItems} title={t.nav.jobs}>
-                <PageHeader title={t.nav.jobs} />
+            <ConnectShell badge="Company" portal="company" navItems={navItems}>
+                <PageHeader title={t('menu.jobs')} actions={createHeaderAction('/company/jobs/create', 'Post job')} />
                 <DataTable
                     fetchFunction={fetchJobs}
                     columns={[
-                        { key: 'title', header: 'Title', render: (row) => row.title },
+                        linkedNameColumn<JobRow>('Title', '/company/jobs', (row) => row.title),
                         { key: 'location', header: 'Location', render: (row) => row.location ?? '—' },
                         { key: 'type', header: 'Type', render: (row) => row.employment_type ?? '—' },
                         { key: 'status', header: 'Status', render: (row) => row.status ?? '—' },
-                        {
-                            key: 'created_at',
-                            header: 'Created',
-                            render: (row) =>
-                                row.created_at ? new Date(row.created_at).toLocaleDateString() : '—',
-                        },
+                        { key: 'created_at', header: 'Created', render: (row) => formatDate(row.created_at) },
+                        resourceActionsColumn<JobRow>(t, '/company/jobs', {}),
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

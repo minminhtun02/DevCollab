@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ListStateView } from './ListStateView';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { PaginatedResult } from '@/types/api';
 
 export interface DataTableParams {
@@ -62,28 +62,31 @@ export function DataTable<T>({ columns, fetchFunction, refreshTrigger = 0 }: Dat
     const lastPage = Math.max(1, Math.ceil(totalCount / params.per_page));
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 rounded-xl border border-slate-200/80 bg-white p-4 shadow-card sm:p-6">
             <Input
-                placeholder={t.common.search}
+                placeholder={t('common.table.searchPlaceholder')}
                 value={params.search}
                 onChange={(e) => setParams((p) => ({ ...p, search: e.target.value, page: 1 }))}
                 className="max-w-sm"
             />
             <ListStateView isLoading={isLoading} isError={isError} isEmpty={!isLoading && !isError && rows.length === 0}>
-                <div className="overflow-hidden rounded-xl border border-slate-200">
+                <div className="overflow-x-auto rounded-lg border border-slate-200">
                     <table className="min-w-full divide-y divide-slate-200">
                         <thead className="bg-slate-50">
                             <tr>
                                 {columns.map((col) => (
-                                    <th key={col.key} className="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">
+                                    <th
+                                        key={col.key}
+                                        className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500"
+                                    >
                                         {col.header}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 bg-white">
+                        <tbody className="divide-y divide-slate-100 bg-white">
                             {rows.map((row, i) => (
-                                <tr key={i} className="hover:bg-slate-50">
+                                <tr key={i} className="transition-colors hover:bg-slate-50/80">
                                     {columns.map((col) => (
                                         <td key={col.key} className="px-4 py-3 text-sm text-slate-700">
                                             {col.render(row)}
@@ -94,24 +97,24 @@ export function DataTable<T>({ columns, fetchFunction, refreshTrigger = 0 }: Dat
                         </tbody>
                     </table>
                 </div>
-                <div className="flex items-center justify-between text-sm text-slate-500">
+                <div className="flex flex-col gap-3 pt-2 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                     <span>{totalCount} records</span>
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
                         <button
                             type="button"
                             disabled={params.page <= 1}
-                            className="rounded border px-3 py-1 disabled:opacity-50"
+                            className="rounded-lg border border-slate-200 px-3 py-1.5 font-medium transition-colors hover:bg-slate-50 disabled:opacity-40"
                             onClick={() => setParams((p) => ({ ...p, page: p.page - 1 }))}
                         >
                             Prev
                         </button>
-                        <span>
+                        <span className="min-w-[4rem] text-center">
                             {params.page} / {lastPage}
                         </span>
                         <button
                             type="button"
                             disabled={params.page >= lastPage}
-                            className="rounded border px-3 py-1 disabled:opacity-50"
+                            className="rounded-lg border border-slate-200 px-3 py-1.5 font-medium transition-colors hover:bg-slate-50 disabled:opacity-40"
                             onClick={() => setParams((p) => ({ ...p, page: p.page + 1 }))}
                         >
                             Next

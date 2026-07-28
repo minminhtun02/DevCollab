@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { linkedNameColumn, resourceActionsColumn } from '@/lib/admin-table';
+import { formatDate } from '@/lib/format-date';
+import { useTranslation } from '@/hooks/useTranslation';
 import { companyNavItems } from './nav';
 
 interface ApplicationRow {
@@ -24,24 +26,20 @@ export default function Applications() {
 
     return (
         <AuthGuard portal="company" loginPath="/company/login">
-            <AppShell portal="company" navItems={navItems} title={t.nav.applications}>
-                <PageHeader title={t.nav.applications} />
+            <ConnectShell badge="Company" portal="company" navItems={navItems}>
+                <PageHeader title={t('company.menu.applications')} />
                 <DataTable
                     fetchFunction={fetchApplications}
                     columns={[
-                        { key: 'job', header: t.nav.jobs, render: (row) => row.job?.title ?? '—' },
-                        { key: 'applicant', header: 'Applicant', render: (row) => row.user?.name ?? '—' },
-                        { key: 'email', header: t.auth.email, render: (row) => row.user?.email ?? '—' },
-                        { key: 'status', header: 'Status', render: (row) => row.status ?? '—' },
-                        {
-                            key: 'created_at',
-                            header: 'Applied',
-                            render: (row) =>
-                                row.created_at ? new Date(row.created_at).toLocaleDateString() : '—',
-                        },
+                        linkedNameColumn<ApplicationRow>(t('jobApplications.applicant'), '/company/applications', (row) => row.user?.name ?? `#${row.id}`),
+                        { key: 'job', header: t('menu.jobs'), render: (row) => row.job?.title ?? '—' },
+                        { key: 'email', header: t('auth.email'), render: (row) => row.user?.email ?? '—' },
+                        { key: 'status', header: t('common.status'), render: (row) => row.status ?? '—' },
+                        { key: 'created_at', header: t('common.createdAt'), render: (row) => formatDate(row.created_at) },
+                        resourceActionsColumn<ApplicationRow>(t, '/company/applications', { showEdit: false }),
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

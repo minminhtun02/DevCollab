@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AuthForm } from '@/features/auth/components/AuthForm';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function CompanyRegister() {
     const { t } = useTranslation();
@@ -14,10 +14,9 @@ export default function CompanyRegister() {
             apiPrefix="company"
             mode="register"
             redirectTo="/company/dashboard"
-            title={`${t.app.name} Company — ${t.auth.register}`}
             extraFields={
                 <div className="space-y-2">
-                    <Label htmlFor="company_name">Company name</Label>
+                    <Label htmlFor="company_name">{t('companies.name')}</Label>
                     <Input
                         id="company_name"
                         value={companyName}

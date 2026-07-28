@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" suppressHydrationWarning>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
+
+        <script>
+            (function () {
+                try {
+                    var raw = localStorage.getItem('devcollab-theme');
+                    var mode = 'system';
+                    if (raw) {
+                        var parsed = JSON.parse(raw);
+                        mode = (parsed && parsed.state && parsed.state.mode) || 'system';
+                    }
+                    var dark = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    document.documentElement.classList.toggle('dark', dark);
+                } catch (e) {}
+            })();
+        </script>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

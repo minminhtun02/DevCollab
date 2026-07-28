@@ -6,7 +6,9 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'sonner';
-import { I18nProvider } from '@/lib/i18n';
+import { I18nProvider } from '@/components/I18nProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import '@/i18n/config';
 
 const appName = import.meta.env.VITE_APP_NAME || 'DevCollab';
 const queryClient = new QueryClient({
@@ -25,14 +27,16 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <QueryClientProvider client={queryClient}>
-                <I18nProvider>
-                    <App {...props} />
-                    <Toaster richColors position="top-right" />
-                </I18nProvider>
+                <ThemeProvider>
+                    <I18nProvider>
+                        <App {...props} />
+                        <Toaster richColors position="top-right" />
+                    </I18nProvider>
+                </ThemeProvider>
             </QueryClientProvider>,
         );
     },
     progress: {
-        color: '#4f46e5',
+        color: '#0893f8',
     },
 });

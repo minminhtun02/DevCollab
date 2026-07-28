@@ -1,21 +1,24 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { BrandWordmark } from '@/components/brand/BrandMark';
+import { AppPreferences } from '@/components/common/AppPreferences';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { useAuthStore, type AuthPortal } from '@/store/auth-store';
 import type { ApiEnvelope } from '@/types/api';
+import { cn } from '@/lib/utils';
 
 interface AuthFormProps {
     portal: AuthPortal;
     mode: 'login' | 'register';
     apiPrefix: string;
     redirectTo: string;
-    title: string;
+    title?: string;
     extraFields?: React.ReactNode;
     registerPayload?: (base: Record<string, string>) => Record<string, string>;
 }
@@ -30,7 +33,6 @@ export function AuthForm({
     mode,
     apiPrefix,
     redirectTo,
-    title,
     extraFields,
     registerPayload,
 }: AuthFormProps) {
@@ -66,7 +68,7 @@ export function AuthForm({
         } catch (err: unknown) {
             const message =
                 (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-                t.common.error;
+                t('auth.unexpectedError');
             toast.error(message);
         } finally {
             setLoading(false);
@@ -74,16 +76,22 @@ export function AuthForm({
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={submit} className="space-y-4">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 px-4 py-10">
+            <div className="mb-6 flex w-full max-w-md items-center justify-between gap-4">
+                <BrandWordmark />
+                <AppPreferences />
+            </div>
+            <Card className="w-full max-w-md shadow-lg">
+                <CardContent className="p-6 md:p-8">
+                    <form onSubmit={submit} className="flex flex-col gap-4">
+                        <div className="space-y-1 text-center">
+                            <h1 className="text-2xl font-semibold tracking-tight">{t('auth.welcome')}</h1>
+                            <p className="text-sm text-muted-foreground">{t('auth.loginSubtitle')}</p>
+                        </div>
+
                         {mode === 'register' && (
                             <div className="space-y-2">
-                                <Label htmlFor="name">{t.auth.name}</Label>
+                                <Label htmlFor="name">{t('auth.name', { defaultValue: 'Name' })}</Label>
                                 <Input
                                     id="name"
                                     value={form.name}
@@ -92,18 +100,21 @@ export function AuthForm({
                                 />
                             </div>
                         )}
+
                         <div className="space-y-2">
-                            <Label htmlFor="email">{t.auth.email}</Label>
+                            <Label htmlFor="email">{t('auth.email')}</Label>
                             <Input
                                 id="email"
                                 type="email"
+                                placeholder={t('auth.emailPlaceholder')}
                                 value={form.email}
                                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                                 required
                             />
                         </div>
+
                         <div className="space-y-2">
-                            <Label htmlFor="password">{t.auth.password}</Label>
+                            <Label htmlFor="password">{t('auth.password')}</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -112,9 +123,10 @@ export function AuthForm({
                                 required
                             />
                         </div>
+
                         {mode === 'register' && (
                             <div className="space-y-2">
-                                <Label htmlFor="password_confirmation">{t.auth.passwordConfirmation}</Label>
+                                <Label htmlFor="password_confirmation">{t('common.confirm', { defaultValue: 'Confirm password' })}</Label>
                                 <Input
                                     id="password_confirmation"
                                     type="password"
@@ -124,9 +136,15 @@ export function AuthForm({
                                 />
                             </div>
                         )}
+
                         {extraFields}
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {mode === 'register' ? t.auth.register : t.auth.login}
+
+                        <Button type="submit" className={cn('w-full transition-transform active:scale-[0.98]')} disabled={loading}>
+                            {loading
+                                ? t('common.loading')
+                                : mode === 'register'
+                                  ? t('auth.register')
+                                  : t('auth.login')}
                         </Button>
                     </form>
                 </CardContent>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { PageHeader, ListStateView } from '@/components/common';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import api from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { ApiEnvelope } from '@/types/api';
 import { webNavItems } from './nav';
 
@@ -82,13 +82,13 @@ export default function Profile() {
             toast.success(result.message);
             queryClient.invalidateQueries({ queryKey: ['web', 'profile', 'me'] });
         },
-        onError: () => toast.error(t.common.error),
+        onError: () => toast.error(t('common.error')),
     });
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.profile}>
-                <PageHeader title={t.nav.profile} />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader title={t('webMenu.profile')} />
                 <ListStateView isLoading={isLoading} isError={isError} isEmpty={false}>
                     <Card>
                         <CardContent className="pt-6">
@@ -166,14 +166,14 @@ export default function Profile() {
                                 </div>
                                 <div className="md:col-span-2">
                                     <Button type="submit" disabled={saveMutation.isPending}>
-                                        {t.common.save}
+                                        {t('common.save')}
                                     </Button>
                                 </div>
                             </form>
                         </CardContent>
                     </Card>
                 </ListStateView>
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

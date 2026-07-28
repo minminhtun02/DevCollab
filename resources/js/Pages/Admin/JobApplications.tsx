@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { linkedNameColumn, resourceActionsColumn } from '@/lib/admin-table';
+import { useTranslation } from '@/hooks/useTranslation';
 import { adminNavItems } from './nav';
 
 interface JobApplicationRow {
@@ -21,14 +22,14 @@ export default function JobApplications() {
 
     return (
         <AuthGuard portal="admin" loginPath="/admin/login">
-            <AppShell portal="admin" navItems={navItems} title="Job Applications">
+            <ConnectShell badge="Admin" portal="admin" navItems={navItems} title="Job Applications">
                 <PageHeader title="Job Applications" />
                 <DataTable
                     fetchFunction={fetchApplications}
                     columns={[
-                        { key: 'job', header: t.nav.jobs, render: (row) => row.job?.title ?? '—' },
+                        { key: 'job', header: t('menu.jobs'), render: (row) => row.job?.title ?? '—' },
                         { key: 'applicant', header: 'Applicant', render: (row) => row.user?.name ?? '—' },
-                        { key: 'email', header: t.auth.email, render: (row) => row.user?.email ?? '—' },
+                        { key: 'email', header: t('auth.email'), render: (row) => row.user?.email ?? '—' },
                         { key: 'status', header: 'Status', render: (row) => row.status ?? '—' },
                         {
                             key: 'created_at',
@@ -38,7 +39,7 @@ export default function JobApplications() {
                         },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

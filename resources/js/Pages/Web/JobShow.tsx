@@ -1,12 +1,12 @@
 import { Link } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { ListStateView, PageHeader } from '@/components/common';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import api from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { ApiEnvelope } from '@/types/api';
 import { webNavItems } from './nav';
 
@@ -53,12 +53,12 @@ export default function JobShow() {
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.jobs}>
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
                 <PageHeader
-                    title={data?.title ?? t.nav.jobs}
+                    title={t('menu.jobs')}
                     actions={
                         <Button variant="outline" size="sm" asChild>
-                            <Link href="/app/jobs">{t.common.back}</Link>
+                            <Link href="/app/jobs">{t('common.back')}</Link>
                         </Button>
                     }
                 />
@@ -104,7 +104,7 @@ export default function JobShow() {
                         </Card>
                     )}
                 </ListStateView>
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

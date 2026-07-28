@@ -1,8 +1,8 @@
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { PageHeader } from '@/components/common';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AuthGuard } from '@/hooks/useRequireAuth';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
 import { webNavItems } from './nav';
 
 export default function Settings() {
@@ -11,8 +11,8 @@ export default function Settings() {
 
     return (
         <AuthGuard portal="web" loginPath="/login">
-            <AppShell portal="web" navItems={navItems} title={t.nav.settings}>
-                <PageHeader title={t.nav.settings} description="Manage your account preferences." />
+            <ConnectShell badge="Developer" portal="web" navItems={navItems}>
+                <PageHeader description="Manage your account preferences." />
                 <Card>
                     <CardHeader>
                         <CardTitle>Telegram</CardTitle>
@@ -24,7 +24,7 @@ export default function Settings() {
                         </p>
                     </CardContent>
                 </Card>
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }

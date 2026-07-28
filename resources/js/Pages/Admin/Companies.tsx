@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { AppShell } from '@/components/layouts/AppShell';
+import { ConnectShell } from '@/components/layouts/ConnectShell';
 import { DataTable, PageHeader } from '@/components/common';
 import { AuthGuard } from '@/hooks/useRequireAuth';
 import { createApiDataSource } from '@/lib/api-data-source';
-import { useTranslation } from '@/lib/i18n';
+import { linkedNameColumn, resourceActionsColumn } from '@/lib/admin-table';
+import { useTranslation } from '@/hooks/useTranslation';
 import { adminNavItems } from './nav';
 
 interface CompanyRow {
@@ -21,19 +22,19 @@ export default function Companies() {
 
     return (
         <AuthGuard portal="admin" loginPath="/admin/login">
-            <AppShell portal="admin" navItems={navItems} title={t.nav.companies}>
-                <PageHeader title={t.nav.companies} />
+            <ConnectShell badge="Admin" portal="admin" navItems={navItems}>
+                <PageHeader title={t('menu.companies')} />
                 <DataTable
                     fetchFunction={fetchCompanies}
                     columns={[
                         { key: 'company_name', header: 'Company', render: (row) => row.company_name },
                         { key: 'contact', header: 'Contact', render: (row) => row.user?.name ?? '—' },
-                        { key: 'email', header: t.auth.email, render: (row) => row.user?.email ?? '—' },
+                        { key: 'email', header: t('auth.email'), render: (row) => row.user?.email ?? '—' },
                         { key: 'industry', header: 'Industry', render: (row) => row.industry ?? '—' },
                         { key: 'location', header: 'Location', render: (row) => row.location ?? '—' },
                     ]}
                 />
-            </AppShell>
+            </ConnectShell>
         </AuthGuard>
     );
 }
